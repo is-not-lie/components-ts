@@ -1,4 +1,5 @@
 import { Component } from '@/utils/Component'
+import '@/styles/Button.scss'
 
 export interface ButtonProps {
   el?: string | HTMLElement
@@ -19,12 +20,12 @@ export class Button extends Component<HTMLButtonElement> {
     const button = this.$el
     const { el, htmlType, type, slots } = this.props || {}
     button.type = htmlType || 'button'
-    button.className = `button-style-${type || 'default'}`
+    this.addClassName(`button-style-${type || 'default'}`)
 
     if (slots)
       typeof slots === 'string'
         ? (button.textContent = slots)
-        : button.appendChild(slots)
+        : this.append(slots)
 
     if (el) this.$mount(el)
   }

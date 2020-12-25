@@ -8,20 +8,10 @@ const __DEV__ = process.env.NODE_ENV === 'development'
 const entryPath = __DEV__ ? 'test/index.ts' : 'src/index.ts'
 const resolve = (path: string) => join(__dirname, './', path)
 
-const postcssLoader = __DEV__
-  ? []
-  : {
-      loader: 'postcss-loader',
-      options: {
-        ident: 'postcss',
-        plugins: () => [require('postcss-preset-env')()]
-      }
-    }
-
 const styleLoader = [
   __DEV__ ? 'style-loader' : MiniCssExtractPlugin.loader,
-  { loader: 'css-loader', options: {} }
-].concat(postcssLoader)
+  { loader: 'css-loader', options: { importLoaders: 1 } }
+].concat(__DEV__ ? [] : 'postcss-loader')
 
 const config: Configuration = {
   mode: __DEV__ ? 'development' : 'production',
@@ -35,7 +25,7 @@ const config: Configuration = {
   },
   devtool: __DEV__ ? 'eval-source-map' : 'hidden-source-map',
   resolve: {
-    extensions: ['.ts', '.js', '.json'],
+    extensions: ['.ts', '.tsx', '.js', '.json'],
     alias: {
       '@': resolve('src')
     },
@@ -56,7 +46,12 @@ const config: Configuration = {
             exclude: /node_modules/,
             include: [resolve('src')],
             use: [
-              'babel-loader',
+              {
+                loader: 'babel-loader',
+                options: {
+                  cacheDirectory: __DEV__
+                }
+              },
               {
                 loader: 'ts-loader',
                 options: {

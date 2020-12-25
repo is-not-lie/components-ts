@@ -10,11 +10,12 @@
     "removeComments": true,
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
+    "jsx": "preserve",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "paths": {
       "@/*": ["src/*"]
     }
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "*.js"]
 }
